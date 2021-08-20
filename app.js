@@ -1,4 +1,4 @@
-const galleryItems = [
+ const galleryItems = [
     {
       preview:
         'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825__340.jpg',
@@ -63,3 +63,54 @@ const galleryItems = [
       description: 'Lighthouse Coast Sea',
     },
   ];
+
+const galleryUl = document.querySelector('.gallery') 
+const modal = document.querySelector('.lightbox')
+const closeBtn = document.querySelector('.lightbox__button')
+
+//Перебирає масив galleryItems і записує дані в HTML
+const listItems = (items) => {
+    return items
+    .map(({preview, original,description}) => {
+    return `
+    <li class="gallery__item">
+    <a
+      class="gallery__link"
+      href=${original}
+    >
+      <img
+        class="gallery__image"
+        src=${preview}
+        data-source=${original}
+        alt=${description}
+      />
+    </a>
+  </li>`;})
+
+  .join('');
+}
+
+const elemGallery = listItems(galleryItems)
+galleryUl.insertAdjacentHTML('beforeend', elemGallery)
+
+
+//Відкриває модалку
+const modalImg = document.querySelector('.lightbox__image')
+galleryUl.addEventListener('click', (e) => {
+e.preventDefault()
+if (e.target.nodeName === 'IMG'){
+    modal.classList.add('is-open')
+    modalImg.src = `${e.target.dataset.source}`
+    modalImg.alt = `${e.target.attributes.alt.value}`
+}
+})
+// Закриває модалку
+window.addEventListener('keydown', (e) => {
+    if(e.code === 'Escape'){
+        modal.classList.remove('is-open')
+    }
+})
+
+closeBtn.addEventListener('click', () => {
+    modal.classList.remove('is-open')
+})
